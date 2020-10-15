@@ -47,6 +47,21 @@ router.get('/:difficulty', async(req, res) => {
     }
 });
 
+
+router.patch('/challenge', async (req, res) => {
+    const { challengeData: { IDChallenge, IDUsersChallengeStats }, starsWon } = req.body;
+
+    try {
+        await Challenge.findOneAndUpdate(
+            { _id: IDChallenge, 'usersChallengeData._id': IDUsersChallengeStats }, 
+            { $set: { 'usersChallengeData.$.starsAcquired': starsWon, 'usersChallengeData.$.isCompleted': true } }, 
+        ); 
+        res.status(201).json({ message: 'Challenge successfully updated' });
+    } catch(err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 async function retrieveLevels() {
     return await Level.find();
 }

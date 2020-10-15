@@ -3,6 +3,20 @@
 
     <Menu/>
 
+    <!-- Message -->
+    <v-alert
+      v-model="alert"
+      :color="messageObj.color"
+      border="left"
+      elevation="2"
+      colored-border
+      :icon="messageObj.icon"
+      id="messageGame"
+      transition="scale-transition"
+      >
+      {{messageObj.message}}
+    </v-alert>
+
     <!-- Challenges -->
     <v-row style="height: 100%;" class="justify-center align-center mr-6 ml-6">
       <v-col 
@@ -25,6 +39,7 @@
     <BlackBoard 
       :showBlackBoard="showBlackBoard"
       @closeBlackBoardEmit="closeBlackBoard"
+      @updateMessageGameEmit="updateMessageGame"
     />
 
   </v-container>
@@ -45,8 +60,14 @@ export default {
   },
   data() {
     return {
+      alert: false,
       challenges: null,
-      showBlackBoard: false
+      showBlackBoard: false,
+      messageObj: {
+        message: null,
+        icon: null,
+        color: null
+      }
     }
   },
   created() {
@@ -71,6 +92,32 @@ export default {
     closeBlackBoard() {
       this.showBlackBoard = false
     },
+    updateMessageGame(value) {
+      if (value === 'W') {
+        this.messageObj.message = 'Congratulations, you WON! Refresh to see the changes!'
+        this.messageObj.icon = 'mdi-thumb-up'
+        this.messageObj.color = 'green'
+      } else {
+        this.messageObj.message = 'You have been too SLOW! Try it again!'
+        this.messageObj.icon = 'mdi-thumb-down'
+        this.messageObj.color = 'red'
+      }
+
+      this.alert = true;
+      setTimeout(() => {
+        this.alert = false;
+      }, 2500);
+    }
   }
 }
 </script>
+
+<style>
+  #messageGame {
+    position: fixed;
+    top: 10%; 
+    left: 50%;
+    transform: translate(-50%, -10%);
+    z-index: 9999;
+  }
+</style>

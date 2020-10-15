@@ -76,8 +76,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import { mapGetters, mapActions } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'BlackBoard',
@@ -86,15 +86,52 @@ export default {
       type: Boolean,
     }
   },
-  data() {
-    return {
-
-    }
+  mounted() {
+    document.addEventListener('keyup', this.startGame);
   },
   computed: {
-    ...mapGetters(['scoresBoard'])
+    ...mapGetters(['scoresBoard', 'isUserWon', 'showTimeLeft', 'challengeInfo'])
+  },
+  watch: {
+    isUserWon(value) {
+      if (value) {
+        this.close();
+        const timeSpent = this.challengeInfo.maxTime - this.showTimeLeft;
+        this.updateScoreChallenge(timeSpent);
+        this.$emit('updateMessageGameEmit', 'W')
+      }
+    },
+    showTimeLeft(value) {
+      if (value <= 0) {
+        this.close();
+        this.$emit('updateMessageGameEmit', 'L')
+      }
+    }
   },
   methods: {
+    ...mapActions(['startPlaying']),
+    startGame(e) {
+      if (this.showBlackBoard) this.startPlaying(e);
+    },
+    async updateScoreChallenge(timeSpent) {
+      try {
+        const starsWon = this.checkRange(timeSpent);
+        await axios.patch('http://localhost:3000/api/game/challenge', {challengeData: this.challengeInfo, starsWon});
+      } catch(err) {
+        console.log(`Error occuring when attempting update challange score for user: ${err}`);
+      }
+    },
+    checkRange(timeSpent) {
+      let start = 0;
+      this.scoresBoard.reverse();
+
+      for (let i = 0; i <= this.scoresBoard.length; i++) {
+        if (timeSpent > start && timeSpent <= this.scoresBoard[i].timeLimit) {
+          return this.scoresBoard[i].ratingStarNumber;
+        }
+        start = this.scoresBoard[i].timeLimit
+      }
+    },
     close() {
       this.$emit('closeBlackBoardEmit')
     }
