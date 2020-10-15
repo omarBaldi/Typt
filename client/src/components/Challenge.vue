@@ -29,6 +29,7 @@
           color="orange"
           class="ml-n3 buttonChallenge"
           text
+          @click="openBlackBoard(challenge)"
           >
             Start!
         </v-btn>
@@ -56,6 +57,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Challenge',
@@ -70,6 +72,16 @@ export default {
   data() {
     return {
       scores: new Array()
+    }
+  },
+  methods: {
+    ...mapActions(['initializeGame']),
+    async openBlackBoard(challenge) {
+      this.$emit('openBlackBoardEmit');
+      while(!document.querySelector('.containerTextBlackboard')) {
+        await new Promise(el => setTimeout(el, 500))
+      }
+      this.initializeGame(challenge);
     }
   }
 }

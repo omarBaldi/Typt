@@ -15,10 +15,17 @@
           <Challenge 
             :challenge="challenge" 
             :index="index" 
+            @openBlackBoardEmit="openBlackBoard"
           />  
 
       </v-col>
     </v-row>
+
+    <!-- Blackboard -->
+    <BlackBoard 
+      :showBlackBoard="showBlackBoard"
+      @closeBlackBoardEmit="closeBlackBoard"
+    />
 
   </v-container>
 </template>
@@ -27,16 +34,19 @@
 import axios from 'axios'
 import Menu from '../components/Menu'
 import Challenge from '../components/Challenge'
+import BlackBoard from '../components/BlackBoard'
 
 export default {
   name: 'Game',
   components: {
     Menu,
-    Challenge
+    Challenge,
+    BlackBoard
   },
   data() {
     return {
-      challenges: null
+      challenges: null,
+      showBlackBoard: false
     }
   },
   created() {
@@ -54,7 +64,13 @@ export default {
       } catch(err) {
         console.log(`Error occuring during retrive sentences: ${err}`);
       }
-    }
+    },
+    openBlackBoard() {
+      this.showBlackBoard = true;
+    },
+    closeBlackBoard() {
+      this.showBlackBoard = false
+    },
   }
 }
 </script>
