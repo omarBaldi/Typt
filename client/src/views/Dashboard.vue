@@ -10,6 +10,7 @@
         v-for="(level, i) in levels"
         :key="i"
         class="containerLevelDifficulty"
+        @click="chooseLevel(level)"
         >
           <div class="levelDifficulty">
             <h2 class="mb-3">{{level.difficulty}}</h2>
@@ -61,6 +62,10 @@ export default {
         console.log(`Error occuring during updating sentence: ${err}`);
       }
       
+    },
+    chooseLevel(currentLevel) {
+      if (this.totalStarsAcquired < currentLevel.starsToUnlock) return 
+      this.$router.push(`/game/${currentLevel.difficulty}`);
     }
   }
 }
