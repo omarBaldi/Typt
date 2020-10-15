@@ -75,7 +75,9 @@ export default {
       try {
         const response = await axios.post('http://localhost:3000/api/auth/login', data);
         const { _id, name, isAdmin } = response.data.currentUser;
-        console.log("Authenticated")
+        localStorage.setItem('currentUser', JSON.stringify({ ID: _id, name, isAdmin }));
+        this.$router.push('/dashboard');
+
       } catch(err) {
         console.log(`Something went wrong in the login post method: ${err}`);
       }
