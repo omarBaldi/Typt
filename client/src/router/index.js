@@ -27,7 +27,10 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/game/:difficulty',
@@ -43,6 +46,18 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
+
+router.beforeEach((to, from, next) => {
+
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+  //TODO: Check if path is in routes (if not redirect to either login or dashboard)
+
+  if (requiresAuth && !currentUser) return next('login');
+  if ((!requiresAuth && currentUser)) return next('dashboard');
+  return next();
+});
 
 export default router

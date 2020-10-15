@@ -79,7 +79,7 @@ export default {
       const currentUser = JSON.parse(localStorage.currentUser);
 
       try {
-        const response = await axios.get(`http://localhost:3000/api/game/${currentLevel}`, { params: { ID: currentUser.ID }});
+        const response = await axios.get(`/api/game/${currentLevel}`, { params: { ID: currentUser.ID }});
         this.challenges = response.data.arrayChallenges;
         console.log(this.challenges)
       } catch(err) {

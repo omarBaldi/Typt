@@ -116,7 +116,7 @@ export default {
     async updateScoreChallenge(timeSpent) {
       try {
         const starsWon = this.checkRange(timeSpent);
-        await axios.patch('http://localhost:3000/api/game/challenge', {challengeData: this.challengeInfo, starsWon});
+        await axios.patch('/api/game/challenge', {challengeData: this.challengeInfo, starsWon});
       } catch(err) {
         console.log(`Error occuring when attempting update challange score for user: ${err}`);
       }

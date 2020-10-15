@@ -53,7 +53,7 @@ export default {
       const currentUser = JSON.parse(localStorage.currentUser);
 
       try {
-        const response = await axios.get('http://localhost:3000/api/game/levels', { params: { ID: currentUser.ID }});
+        const response = await axios.get('/api/game/levels', { params: { ID: currentUser.ID }});
         const { levels, totalStarsAcquired } = response.data;
         this.levels = levels;
         this.totalStarsAcquired = totalStarsAcquired;

@@ -53,7 +53,7 @@ export default {
     async logout() {
 
       try {
-        await axios.get('http://localhost:3000/api/auth/logout');
+        await axios.get('/api/auth/logout');
         localStorage.removeItem('currentUser');
         this.$router.push('/login');
       } 

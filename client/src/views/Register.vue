@@ -102,7 +102,7 @@ export default {
       };
 
       try {
-        await axios.post('http://localhost:3000/api/auth/register', data);
+        await axios.post('/api/auth/register', data);
         this.$router.push('/login');
       } catch(err) {
         console.log(`Something went wrong in the register method: ${err.message}`);

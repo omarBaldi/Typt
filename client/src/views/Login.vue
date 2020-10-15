@@ -73,7 +73,7 @@ export default {
       const data = { username: this.username, password: this.password };
 
       try {
-        const response = await axios.post('http://localhost:3000/api/auth/login', data);
+        const response = await axios.post('/api/auth/login', data);
         const { _id, name, isAdmin } = response.data.currentUser;
         localStorage.setItem('currentUser', JSON.stringify({ ID: _id, name, isAdmin }));
         this.$router.push('/dashboard');
